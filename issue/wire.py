@@ -2,6 +2,7 @@ import hashlib
 import json
 from dataclasses import dataclass
 
+from issue.wire_v2 import decode_v2, is_v2_payload
 from source.locations import RevisionRef, require_name
 
 
@@ -152,6 +153,8 @@ def _read_branch(data: object, entering_escaped: bool) -> tuple[EvidenceBranch, 
 
 
 def decode_piece(payload: bytes) -> PieceEnvelope:
+    if is_v2_payload(payload):
+        return decode_v2(payload)
     if type(payload) is not bytes:
         raise ValueError('piece must be bytes')
     try:

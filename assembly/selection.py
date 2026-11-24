@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 from issue.manifest_view import FrozenManifest
+from issue.wire import PieceEnvelope
 from receipt.inventory import AcceptedPiece, read_accepted
 
 
@@ -25,6 +26,9 @@ def select_segments(
             piece = read_accepted(inventory, accepted_id)
         except LookupError as exc:
             raise ValueError(f'cannot select receipt {accepted_id!r}') from exc
+        piece_envelope = piece.verified.envelope
+        if not isinstance(piece_envelope, PieceEnvelope):
+            raise ValueError(f'receipt {accepted_id} is a V2 windowed piece; ordinary close accepts V1 only')
         identity = piece.verified.envelope.identity
         ref = identity.revision
         if identity.manifest_id != manifest.manifest_id or ref.roll != manifest.roll:
