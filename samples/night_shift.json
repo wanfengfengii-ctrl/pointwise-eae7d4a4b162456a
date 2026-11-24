@@ -1,0 +1,5 @@
+{
+  "roll": "QJ-NIGHT-17",
+  "left": {"segment": "L", "initial_hex": "07 1b", "correction_hex": "07"},
+  "right": {"segment": "R", "initial_hex": "0a 0b 0a"}
+}
